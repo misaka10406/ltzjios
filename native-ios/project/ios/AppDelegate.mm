@@ -32,17 +32,28 @@
 #include "platform/ios/IOSPlatform.h"
 #import "platform/ios/AppDelegateBridge.h"
 #import "service/SDKWrapper.h"
+#import <Security/Security.h>
 
 
 static UITextView *LTZJBootText = nil;
 static UIWindow *LTZJBootWindow = nil;
 static BOOL LTZJBootFailed = NO;
 @interface LTZJBootDiagnostics : NSObject
++ (NSString *)randomBytes:(int)count;
 + (void)setStatus:(NSString *)text;
 + (void)fail:(NSString *)text;
 + (void)finish:(NSString *)unused;
 @end
 @implementation LTZJBootDiagnostics
++ (NSString *)randomBytes:(int)count {
+    if (count < 0 || count > 65536) return nil;
+    NSMutableData *data = [NSMutableData dataWithLength:(NSUInteger)count];
+    if (SecRandomCopyBytes(kSecRandomDefault, (size_t)count, data.mutableBytes) != errSecSuccess) return nil;
+    const unsigned char *bytes = (const unsigned char *)data.bytes;
+    NSMutableString *hex = [NSMutableString stringWithCapacity:(NSUInteger)count * 2];
+    for (int i = 0; i < count; ++i) [hex appendFormat:@"%02x", bytes[i]];
+    return hex;
+}
 + (void)setStatus:(NSString *)text {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!LTZJBootFailed) LTZJBootText.text = [@"雷霆战机\n\n" stringByAppendingString:text ?: @""];

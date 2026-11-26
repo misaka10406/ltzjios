@@ -20,3 +20,4 @@ add_executable(${EXECUTABLE_NAME} ${CC_ALL_SOURCES})
 cc_ios_after_target(${EXECUTABLE_NAME})
 set_target_properties(${EXECUTABLE_NAME} PROPERTIES
     XCODE_ATTRIBUTE_PRODUCT_BUNDLE_IDENTIFIER "com.ltzj.native.ios")
+target_link_libraries(${EXECUTABLE_NAME} "-framework Security")

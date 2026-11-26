@@ -1,0 +1,7 @@
+{
+  "compiler": "Binaryen 123.0.0 wasm2js -O",
+  "inputSHA256": "8b400b2094161d0700f8a9a0a6213f962262f49f137d776663cdad3aeb804a7e",
+  "inputResource": "assets/resources/native/07/076d9b02-40fb-4e8c-adab-b6458c16c5a2.97e86.bin",
+  "validation": "30 identical encryption/decode-result vectors and 1000 identical finite property keys against original Wasm with deterministic test entropy; actual registration hook tested without WebAssembly/NativeEncrypt",
+  "productionEntropy": "Apple SecRandomCopyBytes via LTZJBootDiagnostics.randomBytes:"
+}

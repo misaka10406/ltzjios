@@ -3,8 +3,9 @@ from pathlib import Path
 import json, shutil
 root=Path(__file__).resolve().parents[1]
 data=root/'build-input/data'
-for name in ['main.js','realMain.js','boot-diagnostics.js','native-platform.js']:
+for name in ['main.js','realMain.js','boot-diagnostics.js','native-platform.js','native-ns-installer.js','ns-runtime-asm.js','ns-runtime-factory.js']:
     shutil.copyfile(root/'runtime'/name,data/name)
+shutil.copyfile(root/'runtime/ns-runtime-binaryen-LICENSE.txt',data/'ns-runtime-binaryen-LICENSE.txt')
 (data/'src/import-map.89abd.json').write_text(json.dumps({'imports':{'cc':'./cocos-js/cc.954ce.js'}}),encoding='utf-8')
 p=data/'application.3a3d3.js'
 s=p.read_text(encoding='utf-8')

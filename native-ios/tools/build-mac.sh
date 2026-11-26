@@ -2,6 +2,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 ROOT="$PWD"
+python3 runtime/patch_resources.py
 test -f build-input/data/main.js || { echo 'Prepare resources on Windows first, then copy native-ios to this Mac.' >&2; exit 1; }
 command -v cmake >/dev/null || { echo 'Install CMake 3.x and Xcode first.' >&2; exit 1; }
 xcrun --find clang >/dev/null

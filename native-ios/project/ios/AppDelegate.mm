@@ -33,6 +33,34 @@
 #import "platform/ios/AppDelegateBridge.h"
 #import "service/SDKWrapper.h"
 
+
+static UITextView *LTZJBootText = nil;
+static UIWindow *LTZJBootWindow = nil;
+static BOOL LTZJBootFailed = NO;
+@interface LTZJBootDiagnostics : NSObject
++ (void)setStatus:(NSString *)text;
++ (void)fail:(NSString *)text;
++ (void)finish:(NSString *)unused;
+@end
+@implementation LTZJBootDiagnostics
++ (void)setStatus:(NSString *)text {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!LTZJBootFailed) LTZJBootText.text = [@"雷霆战机\n\n" stringByAppendingString:text ?: @""];
+    });
+}
++ (void)fail:(NSString *)text {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        LTZJBootFailed = YES;
+        LTZJBootText.text = [@"游戏启动失败\n请复制以下信息反馈：\n\n" stringByAppendingString:text ?: @"未知错误"];
+        [LTZJBootWindow addSubview:LTZJBootText];
+        [LTZJBootWindow bringSubviewToFront:LTZJBootText];
+    });
+}
++ (void)finish:(NSString *)unused {
+    dispatch_async(dispatch_get_main_queue(), ^{ if (!LTZJBootFailed) [LTZJBootText removeFromSuperview]; });
+}
+@end
+
 @implementation AppDelegate
 @synthesize window;
 @synthesize appDelegateBridge;
@@ -56,6 +84,17 @@
     [self.window setRootViewController:_viewController];
 
     [self.window makeKeyAndVisible];
+    LTZJBootWindow = self.window;
+    LTZJBootText = [[UITextView alloc] initWithFrame:self.window.bounds];
+    LTZJBootText.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    LTZJBootText.backgroundColor = [UIColor colorWithWhite:0.04 alpha:1];
+    LTZJBootText.textColor = UIColor.whiteColor;
+    LTZJBootText.font = [UIFont systemFontOfSize:16];
+    LTZJBootText.textContainerInset = UIEdgeInsetsMake(90, 24, 24, 24);
+    LTZJBootText.editable = NO;
+    LTZJBootText.selectable = YES;
+    LTZJBootText.text = @"雷霆战机\n\n正在启动原生引擎…";
+    [self.window addSubview:LTZJBootText];
     [appDelegateBridge application:application didFinishLaunchingWithOptions:launchOptions];
     return YES;
 }

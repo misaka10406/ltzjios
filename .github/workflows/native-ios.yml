@@ -35,6 +35,16 @@ jobs:
           for part in json.loads((p/'parts.json').read_text()):
               (p/part['name']).unlink()
           PY
+      - name: Restore native build cache
+        id: native-cache
+        uses: actions/cache/restore@v4
+        with:
+          path: |
+            native-ios/vendor/cocos-engine
+            native-ios/build/xcode/build
+            native-ios/build/xcode/generated
+          key: native-ios-engine-3.8.8-intel-v1-${{ github.run_id }}
+          restore-keys: native-ios-engine-3.8.8-intel-v1-
       - name: Build native iOS IPA
         run: |
           set -o pipefail
@@ -73,3 +83,12 @@ jobs:
           name: LTZJNative-binary-only
           path: native-ios/dist/LTZJNative-binary-only.zip
           retention-days: 7
+      - name: Cache native build objects
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: |
+            native-ios/vendor/cocos-engine
+            native-ios/build/xcode/build
+            native-ios/build/xcode/generated
+          key: ${{ steps.native-cache.outputs.cache-primary-key }}

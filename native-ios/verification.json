@@ -21,6 +21,7 @@
   "xcodeBuild": "passed",
   "deviceTest": "not-run",
   "frameRateImprovement": "not-measured",
-  "githubRun": "https://github.com/misaka10406/ltzjios/actions/runs/45745255244",
-  "ciBundleValidation": "passed: arm64 executable, Info.plist, native bootstrap and main game script"
+  "githubRun": "https://github.com/misaka10406/ltzjios/actions/runs/45820672399",
+  "ciBundleValidation": "passed: arm64 executable, Info.plist, native bootstrap and main game script",
+  "bootRegressionTests": "passed: physical native import map, native renderer defaults, boot stages and error routing"
 }

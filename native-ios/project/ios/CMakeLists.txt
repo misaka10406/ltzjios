@@ -18,3 +18,7 @@ set(EXECUTABLE_NAME ${APP_NAME}-mobile)
 cc_ios_before_target(${EXECUTABLE_NAME})
 add_executable(${EXECUTABLE_NAME} ${CC_ALL_SOURCES})
 cc_ios_after_target(${EXECUTABLE_NAME})
+add_custom_command(TARGET ${EXECUTABLE_NAME} POST_BUILD
+    COMMAND /usr/bin/ditto "${RES_DIR}/data/" "$<TARGET_BUNDLE_DIR:${EXECUTABLE_NAME}>"
+    COMMENT "Copy packaged native game resources"
+    VERBATIM)

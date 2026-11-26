@@ -5,13 +5,14 @@ ROOT="$PWD"
 test -f build-input/data/main.js || { echo 'Prepare resources on Windows first, then copy native-ios to this Mac.' >&2; exit 1; }
 command -v cmake >/dev/null || { echo 'Install CMake 3.x and Xcode first.' >&2; exit 1; }
 xcrun --find clang >/dev/null
+cp config/cfg.cmake build-input/proj/cfg.cmake
 mkdir -p vendor
 if [[ ! -d vendor/cocos-engine/.git ]]; then
   git clone --depth 1 --branch v3.8.8 https://github.com/cocos/cocos-engine.git vendor/cocos-engine
 fi
 if [[ ! -d vendor/cocos-engine/native/external/.git ]]; then
   git clone --filter=blob:none --sparse --depth 1 --branch v3.8.8-2 https://github.com/cocos/cocos-engine-external.git vendor/cocos-engine/native/external
-  git -C vendor/cocos-engine/native/external sparse-checkout set ios sources cmake
+  git -C vendor/cocos-engine/native/external sparse-checkout set ios sources cmake mac/bin
 fi
 cmake -S project/ios -B build/xcode -G Xcode \
   -DNODE_EXECUTABLE="$(command -v node)" -DAPP_NAME=LTZJNative -DRES_DIR="$ROOT/build-input" \

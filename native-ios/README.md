@@ -28,7 +28,7 @@ bash tools/build-mac.sh
 
 ## 验证与限制
 
-已通过 GitHub Actions macOS 真机目标 Release 编译（run 45820672399），尚未进行 iPhone 真机测试。公网资源地址检查返回 503，尚未验证登录和战斗。原生 SDK 防护仅处理缺失的广告/统计渠道桥接，不构成这些 SDK 的完整 iOS 实现。
+已通过 GitHub Actions macOS 真机目标 Release 编译（run 45831298611），尚未进行 iPhone 真机测试。公网资源地址检查返回 503，尚未验证登录和战斗。原生 SDK 防护仅处理缺失的广告/统计渠道桥接，不构成这些 SDK 的完整 iOS 实现。
 
 建议真机检查：冷启动、账号密码登录、主界面、进入战斗、音效、输入框、前后台切换、Spine 动画及内存峰值。Android 构建的引擎脚本在 iOS 绑定上的兼容性、游戏中的渠道 SDK 分支仍需实际运行验证。
 
@@ -40,6 +40,8 @@ bash tools/build-mac.sh
 
 原网页客户端和已发布 IPA 保持原状。
 
-成功构建：https://github.com/misaka10406/ltzjios/actions/runs/45820672399
+成功构建：https://github.com/misaka10406/ltzjios/actions/runs/45831298611
 
 黑屏修复：恢复原生引擎导入映射，移除网页渲染强制项，加入屏幕启动诊断。修复版已通过 Actions 编译，尚未进行 iPhone 实测。
+
+版本 1.30.5（3）：根据真机崩溃栈，关闭不配套的原生调试绘制、辅助几何绘制与遮挡查询模块。新二进制的 PipelineSceneData::activate 只有 8 字节且无辅助初始化调用；旧版为 48 字节并调用三个辅助模块。尚待 iPhone 复测。

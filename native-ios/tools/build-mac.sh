@@ -21,8 +21,23 @@ cmake -S project/ios -B build/xcode -G Xcode \
   -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
   -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
 cmake --build build/xcode --config Release --parallel 3
-APP="$(find build/xcode -type d -name '*.app' -path '*Release*' -print -quit)"
-test -n "$APP"
+APP="$ROOT/build/xcode/Release-iphoneos/LTZJNative-mobile.app"
+test -f "$APP/Info.plist"
+test -x "$APP/LTZJNative-mobile"
+mkdir -p dist
+ditto -c -k --keepParent "$APP" dist/LTZJNative-binary-only.zip
+ditto "$ROOT/build-input/data/" "$APP/"
+python3 - "$APP" <<'PY'
+from pathlib import Path
+import plistlib,struct,sys
+p=Path(sys.argv[1]);info=plistlib.loads((p/'Info.plist').read_bytes())
+assert info['CFBundleIdentifier']=='com.ltzj.native.ios'
+b=(p/info['CFBundleExecutable']).read_bytes()
+assert struct.unpack('<II',b[:8])==(0xfeedfacf,0x100000c)
+for name in ['main.js','realMain.js','native-platform.js','native-local-backend.js','assets/main/index.a4fb4.js']:
+    assert (p/name).is_file(),name
+print('PASS: real arm64 executable, bundle metadata, native bootstrap and game assets')
+PY
 mkdir -p dist/Payload
 ditto "$APP" "dist/Payload/LTZJNative.app"
 test -n "$(find dist/Payload/LTZJNative.app -name main.js -print -quit)"

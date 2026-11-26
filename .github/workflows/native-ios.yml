@@ -66,3 +66,10 @@ jobs:
         with:
           name: native-ios-build-log
           path: ${{ runner.temp }}/native-build.log
+      - name: Preserve native binary for recovery
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: LTZJNative-binary-only
+          path: native-ios/dist/LTZJNative-binary-only.zip
+          retention-days: 7

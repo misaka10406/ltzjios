@@ -18,7 +18,8 @@
   ],
   "bundleConfigs": 310,
   "sourceMainScriptSHA256": "650e9381d1136eba897e58aa60f71693ada452454cb2bb8ea39914d7d60000f3",
-  "xcodeBuild": "not-run",
+  "xcodeBuild": "passed",
   "deviceTest": "not-run",
-  "frameRateImprovement": "not-measured"
+  "frameRateImprovement": "not-measured",
+  "githubRun": "https://github.com/misaka10406/ltzjios/actions/runs/45740555494"
 }

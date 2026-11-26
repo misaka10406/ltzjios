@@ -28,7 +28,7 @@ bash tools/build-mac.sh
 
 ## 验证与限制
 
-当前在 Windows 上构造，尚未运行 Xcode 编译和 iPhone 真机测试，不能将本目录视为已验证可玩的 IPA。公网资源地址检查返回 503，尚未验证登录和战斗。原生 SDK 防护仅处理缺失的广告/统计渠道桥接，不构成这些 SDK 的完整 iOS 实现。
+已通过 GitHub Actions macOS 真机目标 Release 编译（run 45740555494），尚未进行 iPhone 真机测试。公网资源地址检查返回 503，尚未验证登录和战斗。原生 SDK 防护仅处理缺失的广告/统计渠道桥接，不构成这些 SDK 的完整 iOS 实现。
 
 建议真机检查：冷启动、账号密码登录、主界面、进入战斗、音效、输入框、前后台切换、Spine 动画及内存峰值。Android 构建的引擎脚本在 iOS 绑定上的兼容性、游戏中的渠道 SDK 分支仍需实际运行验证。
 
@@ -39,3 +39,5 @@ bash tools/build-mac.sh
 - https://github.com/cocos/cocos-engine/tree/v3.8.8/templates/ios
 
 原网页客户端和已发布 IPA 保持原状。
+
+成功构建：https://github.com/misaka10406/ltzjios/actions/runs/45740555494

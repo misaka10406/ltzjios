@@ -21,6 +21,9 @@ cmake -S project/ios -B build/xcode -G Xcode \
   -DCMAKE_OSX_SYSROOT=iphoneos -DCMAKE_OSX_ARCHITECTURES=arm64 \
   -DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_ALLOWED=NO \
   -DCMAKE_XCODE_ATTRIBUTE_CODE_SIGNING_REQUIRED=NO
+for flag in USE_DEBUG_RENDERER USE_GEOMETRY_RENDERER USE_OCCLUSION_QUERY; do
+  grep -qx "$flag:BOOL=OFF" build/xcode/CMakeCache.txt
+done
 cmake --build build/xcode --config Release --parallel 3
 APP="$ROOT/build/xcode/Release-iphoneos/LTZJNative-mobile.app"
 test -f "$APP/Info.plist"

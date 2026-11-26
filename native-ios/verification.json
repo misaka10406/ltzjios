@@ -19,16 +19,17 @@
   "bundleConfigs": 310,
   "sourceMainScriptSHA256": "650e9381d1136eba897e58aa60f71693ada452454cb2bb8ea39914d7d60000f3",
   "xcodeBuild": "passed",
-  "deviceTest": "not-run",
+  "deviceTest": "pending-user-retest",
   "frameRateImprovement": "not-measured",
-  "githubRun": "https://github.com/misaka10406/ltzjios/actions/runs/45831298611",
+  "githubRun": "https://github.com/misaka10406/ltzjios/actions/runs/45845740266",
   "ciBundleValidation": "passed: arm64 executable, Info.plist, native bootstrap and main game script",
-  "bootRegressionTests": "passed: physical native import map, native renderer defaults, boot stages and error routing",
-  "bundleVersion": "3",
+  "bootRegressionTests": "passed: adapters before scene run; actual UILogin gates diagnostics dismissal; timeout/error reporting",
+  "bundleVersion": "4",
   "nativePipelineRegression": {
     "function": "PipelineSceneData::activate",
     "bytes": 8,
     "directCalls": [],
     "passed": true
-  }
+  },
+  "portableNS": "passed: 30 original Wasm differential encryption/decode vectors, 1000 identical finite keys, no WebAssembly/NativeEncrypt"
 }

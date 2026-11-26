@@ -1,0 +1,24 @@
+{
+  "status": "static-checks-passed",
+  "requiredFiles": [
+    "main.js",
+    "realMain.js",
+    "native-platform.js",
+    "native-local-backend.js",
+    "local-login-adapter.js",
+    "local-server.json",
+    "application.3a3d3.js",
+    "src/settings.69501.json",
+    "src/import-map.89abd.json",
+    "src/chunks/bundle.30fd2.js",
+    "src/cocos-js/cc.954ce.js",
+    "jsb-adapter/web-adapter.js",
+    "jsb-adapter/engine-adapter.js",
+    "assets/main/index.a4fb4.js"
+  ],
+  "bundleConfigs": 310,
+  "sourceMainScriptSHA256": "650e9381d1136eba897e58aa60f71693ada452454cb2bb8ea39914d7d60000f3",
+  "xcodeBuild": "not-run",
+  "deviceTest": "not-run",
+  "frameRateImprovement": "not-measured"
+}

@@ -1,0 +1,68 @@
+name: Build native Cocos iOS
+on:
+  push:
+    branches: [native-ios]
+  workflow_dispatch:
+permissions:
+  contents: write # The build token must be able to see the private draft release.
+jobs:
+  build:
+    runs-on: macos-15-intel
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download native build resources
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/native-input"
+          gh release download native-ios-inputs-20261126 --repo "$GITHUB_REPOSITORY" --pattern 'LTZJNative.part-*' --pattern parts.json --dir "$RUNNER_TEMP/native-input"
+          python3 - <<'PY'
+          import os, pathlib, json, hashlib, zipfile
+          p=pathlib.Path(os.environ['RUNNER_TEMP'])/'native-input'
+          with (p/'source.zip').open('wb') as out:
+              for part in json.loads((p/'parts.json').read_text()):
+                  h=hashlib.sha256(); size=0
+                  with (p/part['name']).open('rb') as f:
+                      for chunk in iter(lambda:f.read(1048576),b''):
+                          h.update(chunk);size+=len(chunk);out.write(chunk)
+                  assert size==part['size'] and h.hexdigest()==part['sha256'],part['name']
+          with zipfile.ZipFile(p/'source.zip') as z:
+              for entry in z.infolist():
+                  if entry.filename.startswith('native-ios/build-input/'):
+                      z.extract(entry,os.environ['GITHUB_WORKSPACE'])
+          (p/'source.zip').unlink()
+          for part in json.loads((p/'parts.json').read_text()):
+              (p/part['name']).unlink()
+          PY
+      - name: Build native iOS IPA
+        run: |
+          set -o pipefail
+          cp native-ios/config/cfg.cmake native-ios/build-input/proj/cfg.cmake
+          bash native-ios/tools/build-mac.sh 2>&1 | tee "$RUNNER_TEMP/native-build.log"
+      - name: Save native IPA to draft Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          p=Path('native-ios/dist'); parts=[]
+          with (p/'LTZJNative-unsigned.ipa').open('rb') as f:
+              i=0
+              while True:
+                  chunk=f.read(768*1024*1024)
+                  if not chunk: break
+                  name=f'LTZJNative-IPA.part-{i:03d}';(p/name).write_bytes(chunk)
+                  parts.append({'name':name,'size':len(chunk),'sha256':hashlib.sha256(chunk).hexdigest()});i+=1
+          (p/'ipa-parts.json').write_text(json.dumps(parts))
+          PY
+          tag="native-ios-result-$GITHUB_RUN_ID"
+          gh release create "$tag" --repo "$GITHUB_REPOSITORY" --draft --prerelease --target "$GITHUB_SHA" --title "Native iOS build $GITHUB_RUN_ID" --notes 'Unsigned native IPA. Combine the numbered parts in order; signing and device testing required.'
+          gh release upload "$tag" native-ios/dist/LTZJNative-IPA.part-* native-ios/dist/ipa-parts.json native-ios/dist/LTZJNative-unsigned.sha256 --repo "$GITHUB_REPOSITORY"
+      - name: Upload build log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-ios-build-log
+          path: ${{ runner.temp }}/native-build.log

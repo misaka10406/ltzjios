@@ -19,12 +19,12 @@
   "bundleConfigs": 310,
   "sourceMainScriptSHA256": "650e9381d1136eba897e58aa60f71693ada452454cb2bb8ea39914d7d60000f3",
   "xcodeBuild": "passed",
-  "deviceTest": "pending-user-retest",
+  "deviceTest": "pending-user-remember-account-retest",
   "frameRateImprovement": "not-measured",
   "githubRun": "https://github.com/misaka10406/ltzjios/actions/runs/45920296546",
   "ciBundleValidation": "passed: arm64 executable, Info.plist, native bootstrap and main game script",
   "bootRegressionTests": "passed: adapters before scene run; actual UILogin gates diagnostics dismissal; timeout/error reporting",
-  "bundleVersion": "5",
+  "bundleVersion": "7",
   "nativePipelineRegression": {
     "function": "PipelineSceneData::activate",
     "bytes": 8,
@@ -32,5 +32,10 @@
     "passed": true
   },
   "portableNS": "passed: 30 original Wasm differential encryption/decode vectors, 1000 identical finite keys, no WebAssembly/NativeEncrypt",
-  "metalShaderValidation": "14 shaders, 56 GLSL 450 stage/variant compilations to SPIR-V passed"
+  "metalShaderValidation": "14 shaders, 56 GLSL 450 stage/variant compilations to SPIR-V passed",
+  "accountActions": "passed: registration true, sail login false, registration state reset; one registration button",
+  "finalIPA": "dist/LTZJNative-remember-account-unsigned.ipa",
+  "nativeBinaryBuildRun": 45920296546,
+  "assembly": "Reused verified version 5 native binary; version 6 JS and bundle metadata",
+  "rememberAccount": "passed: fresh runtime restore; login failure and registration do not overwrite; no automatic login"
 }

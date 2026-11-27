@@ -21,15 +21,16 @@
   "xcodeBuild": "passed",
   "deviceTest": "pending-user-retest",
   "frameRateImprovement": "not-measured",
-  "githubRun": "https://github.com/misaka10406/ltzjios/actions/runs/45845740266",
+  "githubRun": "https://github.com/misaka10406/ltzjios/actions/runs/45920296546",
   "ciBundleValidation": "passed: arm64 executable, Info.plist, native bootstrap and main game script",
   "bootRegressionTests": "passed: adapters before scene run; actual UILogin gates diagnostics dismissal; timeout/error reporting",
-  "bundleVersion": "4",
+  "bundleVersion": "5",
   "nativePipelineRegression": {
     "function": "PipelineSceneData::activate",
     "bytes": 8,
     "directCalls": [],
     "passed": true
   },
-  "portableNS": "passed: 30 original Wasm differential encryption/decode vectors, 1000 identical finite keys, no WebAssembly/NativeEncrypt"
+  "portableNS": "passed: 30 original Wasm differential encryption/decode vectors, 1000 identical finite keys, no WebAssembly/NativeEncrypt",
+  "metalShaderValidation": "14 shaders, 56 GLSL 450 stage/variant compilations to SPIR-V passed"
 }

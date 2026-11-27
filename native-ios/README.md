@@ -49,3 +49,5 @@ bash tools/build-mac.sh
 版本 1.30.5（4）：登录适配提前至场景启动前安装；将原游戏 NS Wasm 辅助模块经 Binaryen 123.0.0 转为 JavaScript，保持模块导出与调用方式，处理通用 iOS 引擎缺少 NativeEncrypt 的情况。随机数据由 Apple SecRandomCopyBytes 提供。30 组加密/解码对照与 1000 次数值键对照通过。启动诊断等待 UILogin 实际激活后隐藏，90 秒未显示则报告当前场景。已通过 Actions 编译，尚待本版真机复测。
 
 版本 1.30.5（5）：用户反馈版本 4 已有音乐和触摸反馈但无画面。发现全部 14 个着色器只有 glsl1/glsl3，而 Metal 使用 glsl4。runtime/patch_metal_shaders.py 根据原始着色器反射数据及官方 3.8.8 绑定定义补齐 GLSL 450 的描述符集、绑定及输入输出位置；不替换游戏美术素材。56 组顶点/片元及宏组合通过 glslang SPIR-V 编译。Actions run 45920296546 成功；需手机验证画面恢复情况。
+
+版本 1.30.5（6）：统一两套登录适配的注册状态；红框原有“注册账号”入口发送 register=true，移除重复创建的下方注册按钮。原“点击立即启航”保留登录行为。沿用 run 45920296546 的原生二进制，更新 JavaScript 和 BundleVersion；请求标记测试通过，待真机复测。

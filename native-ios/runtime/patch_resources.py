@@ -14,3 +14,6 @@ if 'renderMode' in s: raise RuntimeError('Unexpected web rendering override; ins
 p.write_text(s,encoding='utf-8')
 assert (data/'src/cocos-js/cc.954ce.js').is_file()
 print('PASS: physical native engine mapping, native renderer defaults, visible boot diagnostics')
+
+from patch_metal_shaders import patch
+patch()

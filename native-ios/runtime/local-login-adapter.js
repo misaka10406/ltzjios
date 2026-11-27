@@ -41,6 +41,8 @@
     }
     const prototype = UILogin.prototype;
     let registering = false;
+    let pendingCredentials = null;
+    const storage = cc.sys.localStorage;
     window.__ltzjStartLocalAccountLogin = function (ui, register) {
       if (registering) return;
       registering = register === true;
@@ -87,8 +89,10 @@
       const password = this.password && this.password.string || "";
       if (!account || !password) {
         registering = false;
+        pendingCredentials = null;
         return this.pipelineFlow(!account ? "请输入账号" : "请输入密码");
       }
+      pendingCredentials = registering ? null : { account, password };
       const request = OwnLoginRequestData.create();
       request.account = account;
       request.register = registering;
@@ -107,16 +111,34 @@
         this.pipelineFlow("注册成功，请使用账号密码登录");
         return true;
       }
+      if (!registering && Number(response && response.responseCmdId) === 1002 && pendingCredentials) {
+        try {
+          storage.setItem("account", pendingCredentials.account);
+          storage.setItem("password", pendingCredentials.password);
+          storage.setItem("loginSuccess", "1");
+        } catch (error) { console.warn("[local-login] cannot remember credentials"); }
+        pendingCredentials = null;
+      }
       return handleResponse.apply(this, arguments);
     };
     const handleError = prototype.handleNetError;
     prototype.handleNetError = function () {
       registering = false;
+      pendingCredentials = null;
       return handleError.apply(this, arguments);
     };
     function showAccountLogin(ui) {
       if (!ui || !ui.ownLoginNode) return;
       ui.ownLoginNode.active = true;
+      if (!ui.__localCredentialsRestored) {
+        ui.__localCredentialsRestored = true;
+        try {
+          if (storage.getItem("loginSuccess") === "1") {
+            if (ui.userName) ui.userName.string = storage.getItem("account") || "";
+            if (ui.password) ui.password.string = storage.getItem("password") || "";
+          }
+        } catch (error) { console.warn("[local-login] cannot restore credentials"); }
+      }
       // Registration is provided by the existing option row in native-local-backend.
       // Keep the original bottom sail button as the login entry.
     }
